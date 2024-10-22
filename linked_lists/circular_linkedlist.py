@@ -1,82 +1,89 @@
 from typing import Optional
 
 
-class Node: 
+class Node:
     __slots__ = ['data', 'next']
+
     def __init__(self, data):
         self.data = data
-        self.next : Optional[Node] = None
+        self.next: Optional[Node] = None
+
 
 class Circular_LinkedList:
     __slots__ = ["head"]
+
     def __init__(self):
-        self.head : Optional[Node] = None
-    
-    def add(self,element):
+        self.head: Optional[Node] = None
+
+    def add(self, element):
         new_node = Node(element)
-        if self.head == None:
-            self.head = new_node 
+        if self.head is None:
+            self.head = new_node
             new_node.next = self.head
             return
         else:
-            current : Optional[Node] = self.head 
-            while current.next != self.head:
+            current: Optional[Node] = self.head
+
+            while current is not None and current.next != self.head:
                 current = current.next
-            current.next = new_node 
-            new_node.next = self.head
+            if current is not None:
+                current.next = new_node
+                new_node.next = self.head
 
-    def find(self,element):
-        if self.head == None:
-            return 
-        current : Optional[Node] = self.head 
+    def find(self, element):
+        if self.head is None:
+            return
+        current: Optional[Node] = self.head
         while True:
-            if current.data == element:
+            if current is not None and current.data == element:
                 return True
-            current = current.next
-            if current == self.head:
-                return False
+            if current is not None:
+                current = current.next
+                if current == self.head:
+                    return False
 
-    def delete(self,element):
-        if self.head == None:
-            return 
+    def delete(self, element):
+        if self.head is None:
+            return
         else:
             # si la cabeza es el nodo a eliminar
-            current : Optional[Node] = self.head 
+            current: Optional[Node] = self.head
             if current.data == element:
                 # si la cabeza es el unico elemento
                 if current.next == self.head:
                     self.head = None
                     return
                 else:
-                    # si la cabeza no es el unico elemento
-                    while current.next != self.head:
-                        current = current.next 
-                    current.next = self.head.next
-                    self.head = self.head.next
+                    while current is not None and current.next != self.head:
+                        current = current.next
+                    if current is not None:
+                        current.next = self.head.next
+                        self.head = self.head.next
             else:
                 previous = None
-                while True: 
+                while True:
                     previous = current
-                    current = current.next
-                    if current.data == element:
-                        previous.next = current.next
+                    if current is None:
                         return
-                    if current == self.head:
-                        break
+                    current = current.next
+                    if current is not None:
+                        if current.data == element and previous is not None:
+                            previous.next = current.next
+                            return
+                        if current == self.head:
+                            break
 
-        
-
-                    
-                    
     def show(self):
-        if self.head == None:
-            return 
+        if self.head is None:
+            return
         else:
             current = self.head
-            while current.next != self.head:
+            while current is not None and current.next != self.head:
                 print(current.data, end=" -> ")
                 current = current.next
-            print(current.next.data)
+            if current is not None and current.next is not None:
+                print(current.next.data)
+
 
 if __name__ == '__main__':
     lista = Circular_LinkedList()
@@ -86,5 +93,3 @@ if __name__ == '__main__':
     print(lista.find(5))
     print(lista.find(100))
     lista.show()
-            
-    
